@@ -1,5 +1,5 @@
 # Riot Grid
-
+[![Build Status](https://travis-ci.org/crisward/riot-grid.svg)](https://travis-ci.org/crisward/riot-grid)
 
 ## Installing
 
