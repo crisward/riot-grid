@@ -7,6 +7,24 @@
 npm install riot-grid
 ```
 
+## Usage
+
+```html
+<grid data="{collection}" height="{400}">
+  <gridhead>
+    <span style="width:70%">Name</span>
+    <span style="width:30%">Age</span>
+  </gridhead>
+  
+  <gridbody>
+    <span style="width:70%">{row.name}</span>
+    <span style="width:30%">{row.age}</span>
+  </gridbody>
+
+</grid>
+
+```
+
 **STILL IN DEVELOPMENT PLEASE DON'T USE**
 
 ## Credit
