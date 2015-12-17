@@ -2,8 +2,8 @@ datagen = require './mockdata'
 
 griddata = datagen(1000)
 gridheight = 400
+require 'es5-shim' #needed for phantom js
 window.riot = require 'riot'
-
 require '../lib/grid.js'
 require './testtag.tag'
 simulant = require 'simulant'
