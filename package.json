@@ -1,6 +1,6 @@
 {
   "name": "riot-grid",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A simple data grid for riot.js",
   "main": "lib/riot-grid.js",
   "repository": "crisward/riot-grid",
