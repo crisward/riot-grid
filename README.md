@@ -28,6 +28,14 @@ npm install riot-grid
 
 **STILL IN DEVELOPMENT PLEASE DON'T USE**
 
+## Todo
+
+* Add multi Select
+* Work out if I can highjack onclick and ondblclick, instead of select and edit
+* Add demo of reorder by column
+* Add demo of change column width
+* Take column widths from head and apply to body ? Pehaps make optional?
+
 ## Credit
 
 

@@ -67,3 +67,5 @@ describe 'grid',->
     simulant.fire(document.querySelectorAll('.gridrow')[2],'dblclick')
     expect(spyclick2.calledOnce).to.be.true
     expect(spyclick2.args[0][0]).to.eql(griddata[2])
+
+
