@@ -9,6 +9,7 @@ require './testtag.tag'
 simulant = require 'simulant'
 
 spyclick = null
+spyclick2 = null
 test = {}
 
 
@@ -21,7 +22,8 @@ describe 'grid',->
     @domnode.appendChild(document.createElement('testtag'))
     @node = document.body.appendChild(@domnode)
     spyclick = sinon.spy()
-    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick})[0]
+    spyclick2 = sinon.spy()
+    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick,testclick2:spyclick2})[0]
     riot.update()
     
   afterEach ->
@@ -56,9 +58,12 @@ describe 'grid',->
     simulant.fire(document.querySelector('.gridrow'),'click')
     expect(@domnode.querySelectorAll('.active').length).to.equal(1)
 
-  it "should callback row when row is clicked",->
+  it "should call onselect on row when row is clicked",->
     simulant.fire(document.querySelector('.gridrow'),'click')
     expect(spyclick.calledOnce).to.be.true
     expect(spyclick.args[0][0]).to.eql(griddata[0])
 
-
+  it "should call onedit callback when row is double clicked",->
+    simulant.fire(document.querySelectorAll('.gridrow')[2],'dblclick')
+    expect(spyclick2.calledOnce).to.be.true
+    expect(spyclick2.args[0][0]).to.eql(griddata[2])

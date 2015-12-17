@@ -84,7 +84,6 @@ gridbody
 
     @handleDblClick = (e)=>
       return if !@parent.opts.onedit
-      @active = e.item.row.id
-      setTimeout -> 
-        opts.onedit(e.item.row) if @parent.opts.onedit? && typeof @parent.opts.onedit == "function"
-      ,50
+      @active = e.item.row
+      @parent.opts.onedit(e.item.row) if @parent.opts.onedit? && typeof @parent.opts.onedit == "function"
+

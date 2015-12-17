@@ -1,6 +1,6 @@
 testtag
 
-  grid(data="{data}",height="{height}",onselect="{handleSelect}")
+  grid(data="{data}",height="{height}",onselect="{handleSelect}",onedit="{handleEdit}")
     gridhead
       span(style="width:40%") First Name
       span(style="width:40%") Surname
@@ -19,3 +19,6 @@ testtag
 
     @handleSelect = (rows)=>
       opts.testclick(rows)
+
+    @handleEdit = (rows)=>
+      opts.testclick2(rows)
