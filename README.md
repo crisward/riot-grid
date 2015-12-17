@@ -1,5 +1,6 @@
 # Riot Grid
 [![Build Status](https://travis-ci.org/crisward/riot-grid.svg)](https://travis-ci.org/crisward/riot-grid)
+[![Coverage Status](https://coveralls.io/repos/crisward/riot-grid/badge.svg?branch=master&service=github)](https://coveralls.io/github/crisward/riot-grid?branch=master)
 
 ## Installing
 
