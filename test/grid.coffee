@@ -20,7 +20,8 @@ describe 'grid',->
     @domnode = document.createElement('div')
     @domnode.appendChild(document.createElement('testtag'))
     @node = document.body.appendChild(@domnode)
-    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight})[0]
+    spyclick = sinon.spy()
+    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick})[0]
     riot.update()
     
   afterEach ->
@@ -40,18 +41,24 @@ describe 'grid',->
     expect(document.querySelectorAll('.gridrow').length).to.be.lt((gridheight/30)+20)
     expect(document.querySelectorAll('.gridrow').length).to.be.gt(gridheight/30)
 
-  it "should render only enough rows after scrolling",(done)->
+  it "should render only enough rows after scrolling",->
     document.querySelector('.gridbody').scrollTop = 1000
-    setTimeout ->
-      expect(document.querySelectorAll('.gridrow').length).to.be.lt((gridheight/30)+20)
-      expect(document.querySelectorAll('.gridrow').length).to.be.gt(gridheight/30)
-      done()
-    ,20
-
-  it "should render only enough rows after scrolling (again)",(done)->
+    expect(document.querySelectorAll('.gridrow').length).to.be.lt((gridheight/30)+20)
+    expect(document.querySelectorAll('.gridrow').length).to.be.gt(gridheight/30)
+   
+  it "should render only enough rows after scrolling (again)",->
     document.querySelector('.gridbody').scrollTop = 4389
-    setTimeout ->
-      expect(document.querySelectorAll('.gridrow').length).to.be.lt((gridheight/30)+20)
-      expect(document.querySelectorAll('.gridrow').length).to.be.gt(gridheight/30)
-      done()
-    ,20 
+    expect(document.querySelectorAll('.gridrow').length).to.be.lt((gridheight/30)+20)
+    expect(document.querySelectorAll('.gridrow').length).to.be.gt(gridheight/30)
+ 
+  it "should change class to active when row is clicked",->
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+    simulant.fire(document.querySelector('.gridrow'),'click')
+    expect(@domnode.querySelectorAll('.active').length).to.equal(1)
+
+  it "should callback row when row is clicked",->
+    simulant.fire(document.querySelector('.gridrow'),'click')
+    expect(spyclick.calledOnce).to.be.true
+    expect(spyclick.args[0][0]).to.eql(griddata[0])
+
+

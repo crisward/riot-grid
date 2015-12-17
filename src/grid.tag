@@ -47,7 +47,7 @@ gridhead
 gridbody
   .gridbody(onscroll='{scrolling}', style='height:{parseInt(parent.opts.height,10)-30}px')
     .scrollblock(style='position:relative;height:{rowheight*parent.opts.data.length}px;background:white')
-      .gridrow(each='{row, i in visibleRows}', class='{active:parent.active==row.id}', style='top:{parent.rowheight*(i+parent.scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
+      .gridrow(each='{row, i in visibleRows}', class='{active:parent.active==row}', style='top:{parent.rowheight*(i+parent.scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
         <yield></yield>
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,7 +61,7 @@ gridbody
 
     @on 'mount',=>
       @rowheight = @parent.opts?.rowheight || 30
-      @active = @parent.opts.active if @parent.opts.active
+      @active = @parent.opts.active if @parent.opts.active?
       
     @on 'update',->
       @gridbody = @root.querySelector(".gridbody")
@@ -78,9 +78,9 @@ gridbody
 
     @handleClick = (e)=>
       return if !@parent.opts.onselect
-      @active = e.item.row.id
+      @active = e.item.row
       return if typeof @parent.opts.onselect != "function"
-      setTimeout (-> @parent.opts.onselect(e.item.row)),50
+      @parent.opts.onselect(e.item.row)
 
     @handleDblClick = (e)=>
       return if !@parent.opts.onedit
