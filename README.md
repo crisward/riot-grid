@@ -11,7 +11,7 @@ npm install riot-grid
 ## Usage
 
 ```html
-<grid data="{collection}" height="{400}" click="{handleSelect}" dblclick="{handleDoubleClick}">
+<grid tabindex="1" data="{collection}" height="{400}" click="{handleSelect}" dblclick="{handleDoubleClick}" onchange="{handleSelectionChange}">
   <gridhead>
     <span style="width:70%">Name</span>
     <span style="width:30%">Age</span>
