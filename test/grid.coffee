@@ -10,8 +10,8 @@ simulant = require 'simulant'
 
 spyclick = null
 spyclick2 = null
+spyChange = null
 test = {}
-
 
 
 describe 'grid',->
@@ -23,7 +23,8 @@ describe 'grid',->
     @node = document.body.appendChild(@domnode)
     spyclick = sinon.spy()
     spyclick2 = sinon.spy()
-    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick,testclick2:spyclick2})[0]
+    spyChange = sinon.spy()
+    @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick,testclick2:spyclick2,testchange:spyChange})[0]
     riot.update()
     
   afterEach ->
@@ -67,6 +68,51 @@ describe 'grid',->
     simulant.fire(document.querySelectorAll('.gridrow')[2],'dblclick')
     expect(spyclick2.calledOnce).to.be.true
     expect(spyclick2.args[0][0]).to.eql(griddata[2])
+
+  it "should select next item when down key is pressed",->
+    rows = document.querySelectorAll('.gridrow')
+    simulant.fire(rows[0],'click')
+    document.querySelector('grid').focus()
+    expect(@domnode.querySelector('.active')).to.equal(rows[0])
+    simulant.fire(document,'keydown',{keyCode:40})
+    expect(@domnode.querySelector('.active')).to.equal(rows[1])
+
+  it "should select next item when down key is pressed",->
+    rows = document.querySelectorAll('.gridrow')
+    simulant.fire(rows[0],'click')
+    document.querySelector('grid').focus()
+    expect(@domnode.querySelector('.active')).to.equal(rows[0])
+    simulant.fire(document,'keydown',{keyCode:40})
+    expect(@domnode.querySelector('.active')).to.equal(rows[1])
+
+  it "should select previous item when up key is pressed",->
+    rows = document.querySelectorAll('.gridrow')
+    simulant.fire(rows[3],'click')
+    document.querySelector('grid').focus()
+    expect(@domnode.querySelector('.active')).to.equal(rows[3])
+    simulant.fire(document,'keydown',{keyCode:38})
+    expect(@domnode.querySelector('.active')).to.equal(rows[2])
+    simulant.fire(document,'keydown',{keyCode:38})
+    expect(@domnode.querySelector('.active')).to.equal(rows[1])
+    simulant.fire(document,'keydown',{keyCode:38})
+    expect(@domnode.querySelector('.active')).to.equal(rows[0])
+
+  it "should not change on keypress if not focused",->
+    rows = document.querySelectorAll('.gridrow')
+    simulant.fire(rows[2],'click')
+    expect(@domnode.querySelector('.active')).to.equal(rows[2])
+    simulant.fire(document,'keydown',{keyCode:38})
+    expect(@domnode.querySelector('.active')).to.equal(rows[2])
+
+  it "should fire onchange on keypress",->
+    rows = document.querySelectorAll('.gridrow')
+    simulant.fire(rows[3],'click')
+    document.querySelector('grid').focus()
+    expect(@domnode.querySelector('.active')).to.equal(rows[3])
+    simulant.fire(document,'keydown',{keyCode:38})
+    expect(spyChange.calledTwice).to.be.true
+
+
 
 describe 'grid without data',->
 

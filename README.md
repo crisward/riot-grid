@@ -43,7 +43,7 @@ you hold back for a few days I may have the update in place, along with the v1.0
 ## Todo
 
 * Add multi Select
-* Work out if I can highjack onclick and ondblclick, instead of select and edit
+* ~~Add keyboard interaction~~
 * Add demo of reorder by column
 * Add demo of change column width
 * Take column widths from head and apply to body ? Pehaps make optional?

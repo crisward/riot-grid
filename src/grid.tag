@@ -53,25 +53,56 @@ gridbody
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   script(type='text/coffee').
     @active = false
+    @hasFocus = false
     @scrollTop = 0 
     @scrollBottom = 10 #default to rendering 10 rows
     @prevScrollTop = -1
+    @downKey = 40
+    @upKey = 38
 
     @on 'error',(err)-> console.error err.message
 
-    @on 'mount',=>
+    @on 'mount',->
       @rowheight = @parent.opts?.rowheight || 30
       @active = @parent.opts.active if @parent.opts.active?
+      document.addEventListener 'keydown',@keydown
+      ['click','focus','blur'].forEach (ev)=> @root.addEventListener ev,@focused
+      @update()
+
+    @on 'unmount',->
+      document.removeEventListener 'keydown',@keydown
+      ['click','focus','blur'].forEach (ev)=> @root.removeEventListener ev,@focused
       
     @on 'update',->
       @gridbody = @root.querySelector(".gridbody")
       return if !@parent.opts.data
       oldScrolltop = @scrollTop   
       @scrollTop = Math.round((@gridbody.scrollTop / @rowheight)/2)*2 -10
-      setTimeout(@update,100) if @scrollTop!=oldScrolltop #reupdate if scroll has changed
       @scrollTop = 0 if @scrollTop < 0
       @scrollBottom = @scrollTop+Math.round((@gridbody.offsetHeight / @rowheight)/2)*2 +20
       @visibleRows = @parent.opts.data.slice(@scrollTop,@scrollBottom)
+      if @keyPressed
+        @activePos = (@keyPressed*@rowheight)-(@gridbody.offsetHeight/2)+@rowheight/2
+        @gridbody.scrollTop = @activePos if @activePos > 0
+        @gridbody.scrollTop = 0   if @activePos < 0
+        @keyPressed = false
+
+    @focused = =>
+      if @parent.root == document.activeElement then @update(hasFocus:true) else @update(hasFocus:false)
+
+    @keydown = (e)=>
+      return @update(hasFocus:false) if @parent.root != document.activeElement
+      @hasFocus = true
+      index = @parent.opts.data.indexOf(@active)
+      index++ if e.keyCode == @downKey
+      index-- if e.keyCode == @upKey
+      index = 0 if index < 0
+      index = @parent.opts.data.length-1 if index >= @parent.opts.data.length
+      @keyPressed = index
+      @active = @parent.opts.data[index]
+      @parent.opts.onchange(@active) #if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
+      e.preventDefault() if e.keyCode == @downKey || e.keyCode == @upKey
+      @update()
 
     @scrolling = (e)=>
       @update()
@@ -79,8 +110,8 @@ gridbody
     @handleClick = (e)=>
       return if !@parent.opts.click
       @active = e.item.row
-      return if typeof @parent.opts.click != "function"
-      @parent.opts.click(e.item.row)
+      @parent.opts.click(@active)    if @parent.opts.click? && typeof @parent.opts.click == "function"
+      @parent.opts.onchange(@active) if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
 
     @handleDblClick = (e)=>
       return if !@parent.opts.dblclick

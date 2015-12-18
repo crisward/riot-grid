@@ -1,6 +1,6 @@
 testtag
 
-  grid(data="{data}",height="{height}",click="{handleSelect}",dblclick="{handleEdit}")
+  grid(data="{data}",tabindex="1",height="{height}",click="{handleSelect}",dblclick="{handleEdit}",onchange="{handleChange}")
     gridhead
       span(style="width:40%") First Name
       span(style="width:40%") Surname
@@ -17,11 +17,14 @@ testtag
       @data = opts.griddata
       @height = opts.gridheight
 
-    @handleSelect = (rows)=>
-      opts.testclick(rows)
+    @handleSelect = (row)=>
+      opts.testclick(row)
 
-    @handleEdit = (rows)=>
-      opts.testclick2(rows) 
+    @handleEdit = (row)=>
+      opts.testclick2(row) 
+
+    @handleChange = (rows)=>
+      opts.testchange(rows)
 
 
 testtag2
