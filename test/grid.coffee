@@ -58,14 +58,52 @@ describe 'grid',->
     simulant.fire(document.querySelector('.gridrow'),'click')
     expect(@domnode.querySelectorAll('.active').length).to.equal(1)
 
-  it "should call onselect on row when row is clicked",->
+  it "should call onclick on row when row is clicked",->
     simulant.fire(document.querySelector('.gridrow'),'click')
     expect(spyclick.calledOnce).to.be.true
     expect(spyclick.args[0][0]).to.eql(griddata[0])
 
-  it "should call onedit callback when row is double clicked",->
+  it "should call ondblclick callback when row is double clicked",->
     simulant.fire(document.querySelectorAll('.gridrow')[2],'dblclick')
     expect(spyclick2.calledOnce).to.be.true
     expect(spyclick2.args[0][0]).to.eql(griddata[2])
 
+describe 'grid without data',->
 
+  beforeEach ->
+    startTime = new Date().getTime()
+    @domnode = document.createElement('div')
+    @domnode.appendChild(document.createElement('testtag2'))
+    @node = document.body.appendChild(@domnode)
+    spyclick = sinon.spy()
+    spyclick2 = sinon.spy()
+    
+  afterEach ->
+    @tag.unmount()
+    @domnode = ''
+
+  it "should add grid without data",->
+    @tag = riot.mount('testtag2',{gridheight:gridheight,testclick:spyclick,testclick2:spyclick2})[0]
+    riot.update()
+    expect(document.querySelectorAll('testtag2').length).to.equal(1)
+    expect(document.querySelectorAll('grid').length).to.equal(1)
+    expect(document.querySelectorAll('.gridrow').length).to.equal(0)
+
+  it "should not hightlight without a callback function",->
+    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,testclick2:spyclick2})[0]
+    riot.update()   
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+    simulant.fire(document.querySelector('.gridrow'),'click')
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+
+  it "should not hightlight on double click without a callback function",->
+    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,testclick2:spyclick2})[0]
+    riot.update()   
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+    simulant.fire(document.querySelector('.gridrow'),'dblclick')
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+
+  it "should set active row if passed in",->
+    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,activerow:griddata[1]})[0]
+    riot.update()   
+    expect(@domnode.querySelectorAll('.active').length).to.equal(1)

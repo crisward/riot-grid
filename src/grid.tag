@@ -47,7 +47,7 @@ gridhead
 gridbody
   .gridbody(onscroll='{scrolling}', style='height:{parseInt(parent.opts.height,10)-30}px')
     .scrollblock(style='position:relative;height:{rowheight*parent.opts.data.length}px;background:white')
-      .gridrow(each='{row, i in visibleRows}', class='{active:parent.active==row}', style='top:{parent.rowheight*(i+parent.scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
+      .gridrow(each='{row, i in visibleRows}', class='{active:active==row}', style='top:{rowheight*(i+scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
         <yield></yield>
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -77,13 +77,13 @@ gridbody
       @update()
 
     @handleClick = (e)=>
-      return if !@parent.opts.onselect
+      return if !@parent.opts.click
       @active = e.item.row
-      return if typeof @parent.opts.onselect != "function"
-      @parent.opts.onselect(e.item.row)
+      return if typeof @parent.opts.click != "function"
+      @parent.opts.click(e.item.row)
 
     @handleDblClick = (e)=>
-      return if !@parent.opts.onedit
+      return if !@parent.opts.dblclick
       @active = e.item.row
-      @parent.opts.onedit(e.item.row) if @parent.opts.onedit? && typeof @parent.opts.onedit == "function"
+      @parent.opts.dblclick(e.item.row) if @parent.opts.dblclick? && typeof @parent.opts.dblclick == "function"
 
