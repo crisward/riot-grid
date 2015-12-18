@@ -26,6 +26,12 @@ npm install riot-grid
 
 ```
 
+## Demo
+
+See demo on [codepen](http://codepen.io/crisward/pen/rxepMX?editors=101)
+This includes a bit of code to generate 100,000 random users to show off the performance of the grid.
+I tried increasing this to 10,000,000 but codepen thought I had an infinite loop. 
+
 **STILL IN DEVELOPMENT PLEASE DON'T USE**
 
 ## Todo
