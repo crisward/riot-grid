@@ -1,6 +1,6 @@
 # Riot Grid
 [![Build Status](https://travis-ci.org/crisward/riot-grid.svg)](https://travis-ci.org/crisward/riot-grid)
-[![Coverage Status](https://coveralls.io/repos/crisward/riot-grid/badge.svg?branch=master&service=github&v=2)](https://coveralls.io/github/crisward/riot-grid?branch=master)
+[![Coverage Status](https://coveralls.io/repos/crisward/riot-grid/badge.svg?branch=master&service=github&v=3)](https://coveralls.io/github/crisward/riot-grid?branch=master)
 
 ## Installing
 
@@ -32,7 +32,13 @@ See demo on [codepen](http://codepen.io/crisward/pen/rxepMX?editors=101)
 This includes a bit of code to generate 100,000 random users to show off the performance of the grid.
 I tried increasing this to 10,000,000 but codepen thought I had an infinite loop. 
 
-**STILL IN DEVELOPMENT PLEASE DON'T USE**
+
+## Api Changes
+
+I plan a couple of api changes. The click and double click events are going to return an array of selected 
+rows, once you can select multiples. So if you can live with this change, feel free to use this. Or if
+you hold back for a few days I may have the update in place, along with the v1.0 release.
+
 
 ## Todo
 
