@@ -1,19 +1,24 @@
 grid
-  <yield />
+  .gridhead 
+    <yield from="head"></yield>
+  .gridbody(onscroll='{scrolling}', style='height:{parseInt(opts.height,10)-30}px')
+    .scrollblock(style='position:relative;height:{rowheight*opts.data.length}px;background:white')
+      .gridrow(each='{row, i in visibleRows}', class='{active:active==row}', style='top:{rowheight*(i+scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
+        <yield from="body" />
  
   style(type="text/stylus").
     grid
       position relative
       display block
       border 1px solid #ccc
-      gridhead 
+      .gridhead 
         background #ddd
         position absolute
         top 0 
         right 0
         left 0
         border-bottom 1px solid #ccc
-      .gridrow > *,gridhead > *
+      .gridrow > *,.gridhead > *
         box-sizing border-box
         display inline-block
         float left
@@ -40,17 +45,7 @@ grid
       .gridrow.active
         background #888
         color white
-
-gridhead
-  <yield />
-
-gridbody
-  .gridbody(onscroll='{scrolling}', style='height:{parseInt(parent.opts.height,10)-30}px')
-    .scrollblock(style='position:relative;height:{rowheight*parent.opts.data.length}px;background:white')
-      .gridrow(each='{row, i in visibleRows}', class='{active:parent.active==row}', style='top:{parent.rowheight*(i+parent.scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
-        <yield></yield>
-
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
   script(type='text/coffee').
     @active = false
     @scrollTop = 0 
@@ -60,30 +55,30 @@ gridbody
     @on 'error',(err)-> console.error err.message
 
     @on 'mount',=>
-      @rowheight = @parent.opts?.rowheight || 30
-      @active = @parent.opts.active if @parent.opts.active?
+      @rowheight = opts?.rowheight || 30
+      @active = opts.active if opts.active?
       
     @on 'update',->
       @gridbody = @root.querySelector(".gridbody")
-      return if !@parent.opts.data
+      return if !opts.data
       oldScrolltop = @scrollTop   
       @scrollTop = Math.round((@gridbody.scrollTop / @rowheight)/2)*2 -10
       setTimeout(@update,100) if @scrollTop!=oldScrolltop #reupdate if scroll has changed
       @scrollTop = 0 if @scrollTop < 0
       @scrollBottom = @scrollTop+Math.round((@gridbody.offsetHeight / @rowheight)/2)*2 +20
-      @visibleRows = @parent.opts.data.slice(@scrollTop,@scrollBottom)
+      @visibleRows = opts.data.slice(@scrollTop,@scrollBottom)
 
     @scrolling = (e)=>
       @update()
 
     @handleClick = (e)=>
-      return if !@parent.opts.onselect
+      return if !opts.onselect
       @active = e.item.row
-      return if typeof @parent.opts.onselect != "function"
-      @parent.opts.onselect(e.item.row)
+      return if typeof opts.onselect != "function"
+      opts.onselect(e.item.row)
 
     @handleDblClick = (e)=>
-      return if !@parent.opts.onedit
+      return if !opts.onedit
       @active = e.item.row
-      @parent.opts.onedit(e.item.row) if @parent.opts.onedit? && typeof @parent.opts.onedit == "function"
+      opts.onedit(e.item.row) if opts.onedit? && typeof opts.onedit == "function"
 

@@ -12,15 +12,15 @@ npm install riot-grid
 
 ```html
 <grid data="{collection}" height="{400}" onselect="{handleSelect}" onedit="{handleDoubleClick}">
-  <gridhead>
+  <yield to="head">
     <span style="width:70%">Name</span>
     <span style="width:30%">Age</span>
-  </gridhead>
+  </yield>
   
-  <gridbody>
+  <yield to="body">
     <span style="width:70%">{row.name}</span>
     <span style="width:30%">{row.age}</span>
-  </gridbody>
+  </yield>
 
 </grid>
 
