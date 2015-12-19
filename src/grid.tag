@@ -47,12 +47,12 @@ gridhead
 gridbody
   .gridbody(onscroll='{scrolling}', style='height:{parseInt(parent.opts.height,10)-30}px')
     .scrollblock(style='position:relative;height:{rowheight*parent.opts.data.length}px;background:white')
-      .gridrow(each='{row, i in visibleRows}', class='{active:active==row}', style='top:{rowheight*(i+scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
+      .gridrow(each='{row, i in visibleRows}', class='{active:isActive(row)}', style='top:{rowheight*(i+scrollTop)}px',ondblclick='{handleDblClick}', onclick='{handleClick}')
         <yield></yield>
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   script(type='text/coffee').
-    @active = false
+    @active = []
     @hasFocus = false
     @scrollTop = 0 
     @scrollBottom = 10 #default to rendering 10 rows
@@ -60,7 +60,7 @@ gridbody
     @downKey = 40
     @upKey = 38
 
-    @on 'error',(err)-> console.error err.message
+    # @on 'error',(err)-> console.error err.message
 
     @on 'mount',->
       @rowheight = @parent.opts?.rowheight || 30
@@ -90,16 +90,25 @@ gridbody
     @focused = =>
       if @parent.root == document.activeElement then @update(hasFocus:true) else @update(hasFocus:false)
 
+    @isActive = (row)=>
+      @active.indexOf(row)>-1
+
     @keydown = (e)=>
       return @update(hasFocus:false) if @parent.root != document.activeElement
+      return if e.keyCode != @downKey && e.keyCode != @upKey
       @hasFocus = true
-      index = @parent.opts.data.indexOf(@active)
+      index = @parent.opts.data.indexOf(@active[@active.length-1])
       index++ if e.keyCode == @downKey
       index-- if e.keyCode == @upKey
       index = 0 if index < 0
       index = @parent.opts.data.length-1 if index >= @parent.opts.data.length
       @keyPressed = index
-      @active = @parent.opts.data[index]
+      row = @parent.opts.data[index]
+      if e.shiftKey
+        idx = @active.indexOf(row)
+        if idx>-1 then @active.splice(idx,1) else @active.push(row)
+      else
+        @active = [row]
       @parent.opts.onchange(@active) #if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
       e.preventDefault() if e.keyCode == @downKey || e.keyCode == @upKey
       @update()
@@ -109,12 +118,22 @@ gridbody
 
     @handleClick = (e)=>
       return if !@parent.opts.click
-      @active = e.item.row
-      @parent.opts.click(@active)    if @parent.opts.click? && typeof @parent.opts.click == "function"
+      if e.shiftKey && @firstSelectedIndex?
+        idx1 = @firstSelectedIndex
+        idx2 = @parent.opts.data.indexOf(e.item.row)
+        @active = [Math.min(idx1,idx2)..Math.max(idx1,idx2)].map (i)=> @parent.opts.data[i]
+      else if e.metaKey
+        idx = @active.indexOf(e.item.row)
+        if idx>-1 then @active.splice(idx,1) else @active.push(e.item.row)
+      else
+        @active = [e.item.row]
+        @firstSelectedIndex = @parent.opts.data.indexOf(e.item.row)
+      window.getSelection().removeAllRanges()
+      @parent.opts.click(e.item.row) if @parent.opts.click? && typeof @parent.opts.click == "function"
       @parent.opts.onchange(@active) if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
 
     @handleDblClick = (e)=>
       return if !@parent.opts.dblclick
-      @active = e.item.row
+      @active = [e.item.row]
       @parent.opts.dblclick(e.item.row) if @parent.opts.dblclick? && typeof @parent.opts.dblclick == "function"
 

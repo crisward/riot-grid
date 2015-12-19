@@ -12,6 +12,7 @@ spyclick = null
 spyclick2 = null
 spyChange = null
 test = {}
+rows = null
 
 
 describe 'grid',->
@@ -26,6 +27,7 @@ describe 'grid',->
     spyChange = sinon.spy()
     @tag = riot.mount('testtag',{griddata:griddata,gridheight:gridheight,testclick:spyclick,testclick2:spyclick2,testchange:spyChange})[0]
     riot.update()
+    rows = document.querySelectorAll('.gridrow')
     
   afterEach ->
     @tag.unmount()
@@ -70,7 +72,6 @@ describe 'grid',->
     expect(spyclick2.args[0][0]).to.eql(griddata[2])
 
   it "should select next item when down key is pressed",->
-    rows = document.querySelectorAll('.gridrow')
     simulant.fire(rows[0],'click')
     document.querySelector('grid').focus()
     expect(@domnode.querySelector('.active')).to.equal(rows[0])
@@ -78,7 +79,6 @@ describe 'grid',->
     expect(@domnode.querySelector('.active')).to.equal(rows[1])
 
   it "should select next item when down key is pressed",->
-    rows = document.querySelectorAll('.gridrow')
     simulant.fire(rows[0],'click')
     document.querySelector('grid').focus()
     expect(@domnode.querySelector('.active')).to.equal(rows[0])
@@ -86,7 +86,6 @@ describe 'grid',->
     expect(@domnode.querySelector('.active')).to.equal(rows[1])
 
   it "should select previous item when up key is pressed",->
-    rows = document.querySelectorAll('.gridrow')
     simulant.fire(rows[3],'click')
     document.querySelector('grid').focus()
     expect(@domnode.querySelector('.active')).to.equal(rows[3])
@@ -98,21 +97,43 @@ describe 'grid',->
     expect(@domnode.querySelector('.active')).to.equal(rows[0])
 
   it "should not change on keypress if not focused",->
-    rows = document.querySelectorAll('.gridrow')
     simulant.fire(rows[2],'click')
     expect(@domnode.querySelector('.active')).to.equal(rows[2])
     simulant.fire(document,'keydown',{keyCode:38})
     expect(@domnode.querySelector('.active')).to.equal(rows[2])
 
   it "should fire onchange on keypress",->
-    rows = document.querySelectorAll('.gridrow')
     simulant.fire(rows[3],'click')
     document.querySelector('grid').focus()
     expect(@domnode.querySelector('.active')).to.equal(rows[3])
     simulant.fire(document,'keydown',{keyCode:38})
     expect(spyChange.calledTwice).to.be.true
 
+  it "should select multiple and all in between with shift click",->
+    simulant.fire(rows[3],'click')
+    simulant.fire(rows[5],'click',{shiftKey:true})
+    expect(spyChange.calledTwice).to.be.true
+    expect(@domnode.querySelector('.active')).to.equal(rows[3])
+    expect(spyChange.args[1][0].length).to.equal(3)
 
+  it "should add one at a time if meta-clicked",->
+    simulant.fire(rows[3],'click')
+    simulant.fire(rows[5],'click',{metaKey:true})
+    expect(@domnode.querySelectorAll('.active').length).to.equal(2)
+    expect(spyChange.args[1][0]).to.eql([griddata[3],griddata[5]])
+
+  it "should deselect row if meta-clicked",->
+    simulant.fire(rows[20],'click')
+    expect(@domnode.querySelectorAll('.active').length).to.equal(1)
+    simulant.fire(rows[20],'click',{metaKey:true})
+    expect(@domnode.querySelectorAll('.active').length).to.equal(0)
+ 
+  it "should select multiple with shift+arrow keys",->
+    simulant.fire(rows[3],'click')
+    document.querySelector('grid').focus()
+    expect(@domnode.querySelectorAll('.active').length).to.equal(1)
+    simulant.fire(document,'keydown',{keyCode:38,shiftKey:true})
+    expect(@domnode.querySelectorAll('.active').length).to.equal(2)
 
 describe 'grid without data',->
 
@@ -149,7 +170,12 @@ describe 'grid without data',->
     simulant.fire(document.querySelector('.gridrow'),'dblclick')
     expect(@domnode.querySelectorAll('.active').length).to.equal(0)
 
-  it "should set active row if passed in",->
-    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,activerow:griddata[1]})[0]
+  it "should set active rows if passed in",->
+    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,activerow:[griddata[1]]})[0]
     riot.update()   
     expect(@domnode.querySelectorAll('.active').length).to.equal(1)
+
+  it "should set multiple active rows if passed in",->
+    @tag = riot.mount('testtag2',{griddata:griddata,gridheight:gridheight,activerow:[griddata[1],griddata[3],griddata[5]]})[0]
+    riot.update()   
+    expect(@domnode.querySelectorAll('.active').length).to.equal(3)

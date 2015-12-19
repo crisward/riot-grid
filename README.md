@@ -30,7 +30,9 @@ npm install riot-grid
 
 See demo on [codepen](http://codepen.io/crisward/pen/rxepMX?editors=101)
 This includes a bit of code to generate 100,000 random users to show off the performance of the grid.
-I tried increasing this to 10,000,000 but codepen thought I had an infinite loop. 
+I tried increasing this to 10,000,000 but codepen thought I had an infinite loop.
+
+Note: the keyboard interaction doesn't seem to work in codepen
 
 
 ## Api Changes
@@ -42,7 +44,7 @@ you hold back for a few days I may have the update in place, along with the v1.0
 
 ## Todo
 
-* Add multi Select
+* ~~Add multi Select~~
 * ~~Add keyboard interaction~~
 * Add demo of reorder by column
 * Add demo of change column width
