@@ -35,22 +35,59 @@ I tried increasing this to 10,000,000 but codepen thought I had an infinite loop
 Note: the keyboard interaction doesn't seem to work in codepen
 
 
-## Api Changes
+## Attributes
 
-I plan a couple of api changes. The click and double click events are going to return an array of selected 
-rows, once you can select multiples. So if you can live with this change, feel free to use this. Or if
-you hold back for a few days I may have the update in place, along with the v1.0 release.
+| Attribute | Description
+|----       |----
+| tabindex  | This needs to be set to enable keyboard interaction, the up and down keys only work when the grid has focus
+| data      | Your collection of data (an array of objects)
+| height    | The height of the grid in pixels
+| rowheight | The height of each row in the grid in pixels (this defaults to 30)
+| click     | Callback fired when a row is click, this returns the selcted row
+| dblclick  | Callback fired when a row is double clicked, this returns the row selected (useful for edit events)
+| onchange  | Callback fires whenever row selection changes. This returns and array of active rows. This fires on both mouse and keyboard events
+| active    | Setting an array of rows will select them in the grid
 
+
+## Keyboard
+
+* Clicking on the grid gives it keyboard focus, allowing multiple grids to work on the page at once.
+* Arrow up selects the previous row in the grid
+* Arrow down selects the next row
+* Shift + Arrow adds more to a selection
+* Shift + Click selects all rows between the first click, and the new click
+* CMD/CTRL + Click toggles row selection
+
+Note: during arrow up/down I scroll the panel to keep the selected row in the center of the panel.
+This may need a little work as it sometimes jump to the center.
+
+## About
+
+I developed this because there doesn't seem to be any grid components available for riot (that I've found). This only
+renders visible rows to the dom so is capable of handling large amounts of data. I've tried it with a million+ rows.
+The browser tends to slow down because of the data processing before is slows down with the rendering. 
+
+The api may seem a little verbose, but being able to pass in the header and body rows gives a lot of flexibility
+in terms of the data you choose to display. You can even include your own tags in the rows.
+
+Each row has to be the same height. This may seem a little restrictive but it makes calculating which rows to render
+much quicker.
+
+## Reordering, Resizing, Data formats etc
+The grid itself doesn't help with reordering, resizing or field formats. However the api is flexible enough
+to allow you to easily implemnt this outside the grid component. This was a deliberate choice as I 
+want the grid to do one thing well, which is to allow you to scroll lots of data. I included the selection api
+too as this is much easier to deal with when embedded.
+
+## Style
+The style applied to this grid is deliberately basic. Its intended to lay things out, but should be overriden
+with your own colour scheme and style. You can probably work out the selectors used by using your web-inspector. 
+Though I may add some notes here in the future.
 
 ## Todo
 
-* ~~Add multi Select~~
-* ~~Add keyboard interaction~~
 * Add demo of reorder by column
 * Add demo of change column width
-* Take column widths from head and apply to body ? Pehaps make optional?
-
-## Credit
 
 
 ## License
