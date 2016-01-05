@@ -109,7 +109,7 @@ gridbody
         if idx>-1 then @active.splice(idx,1) else @active.push(row)
       else
         @active = [row]
-      @parent.opts.onchange(@active) #if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
+      @parent.opts.onchange(@active) if @parent.opts.onchange? && typeof @parent.opts.onchange == "function"
       e.preventDefault() if e.keyCode == @downKey || e.keyCode == @upKey
       @update()
 
