@@ -2,7 +2,7 @@
   "name": "riot-grid",
   "version": "1.0.0",
   "description": "A simple data grid for riot.js",
-  "main": "lib/riot-grid.js",
+  "main": "lib/grid.js",
   "repository": "crisward/riot-grid",
   "scripts": {
     "test": "karma start",
