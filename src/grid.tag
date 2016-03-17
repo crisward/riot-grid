@@ -91,7 +91,7 @@ gridbody
       if @parent.root == document.activeElement then @update(hasFocus:true) else @update(hasFocus:false)
 
     @isActive = (row)=>
-      @active.indexOf(row)>-1
+      @active.indexOf(row)>-1 || (@active.filter (s)-> s.id == row.id).length > 0
 
     @keydown = (e)=>
       return @update(hasFocus:false) if @parent.root != document.activeElement
