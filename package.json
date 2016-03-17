@@ -1,9 +1,12 @@
 {
   "name": "riot-grid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple data grid for riot.js",
   "main": "lib/grid.js",
-  "repository": "crisward/riot-grid",
+  "repository":{ 
+    "type" : "git",
+    "url" : "https://github.com/crisward/riot-grid.git"
+  },
   "scripts": {
     "test": "karma start",
     "tdd": "npm run watch & karma start --reporters=spec --browsers=Chrome --singleRun=false",
