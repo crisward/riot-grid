@@ -49,6 +49,7 @@ Note: the keyboard interaction doesn't seem to work in codepen
 | dblclick  | Callback fired when a row is double clicked, this returns the row selected (useful for edit events)
 | onchange  | Callback fires whenever row selection changes. This returns and array of active rows. This fires on both mouse and keyboard events
 | active    | Setting an array of rows will select them in the grid
+| selectkey | optional keycode to select the row, ie 13 = enter
 
 
 ## Keyboard
@@ -56,6 +57,7 @@ Note: the keyboard interaction doesn't seem to work in codepen
 * Clicking on the grid gives it keyboard focus, allowing multiple grids to work on the page at once.
 * Arrow up selects the previous row in the grid
 * Arrow down selects the next row
+* Provider optional selectkey (see attributes above)
 * Shift + Arrow adds more to a selection
 * Shift + Click selects all rows between the first click, and the new click
 * CMD/CTRL + Click toggles row selection

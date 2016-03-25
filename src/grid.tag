@@ -59,12 +59,14 @@ gridbody
     @prevScrollTop = -1
     @downKey = 40
     @upKey = 38
+    @selectKey = null
 
     # @on 'error',(err)-> console.error err.message
 
     @on 'mount',->
       @rowheight = @parent.opts?.rowheight || 30
       @active = @parent.opts.active if @parent.opts.active?
+      @selectKey = @parent.opts.selectkey if @parent.opts.selectkey?
       document.addEventListener 'keydown',@keydown
       ['click','focus','blur'].forEach (ev)=> @root.addEventListener ev,@focused
       @update()
@@ -95,7 +97,8 @@ gridbody
 
     @keydown = (e)=>
       return @update(hasFocus:false) if @parent.root != document.activeElement
-      return if e.keyCode != @downKey && e.keyCode != @upKey
+      return if e.keyCode != @downKey && e.keyCode != @upKey && e.keyCode != @selectKey
+      return @parent.opts.dblclick(@active[0]) if e.keyCode == @selectKey && @active && @parent.opts.dblclick? && typeof @parent.opts.dblclick == "function"
       @hasFocus = true
       index = @parent.opts.data.indexOf(@active[@active.length-1])
       index++ if e.keyCode == @downKey
