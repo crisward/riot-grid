@@ -1,4 +1,5 @@
 <img src="https://cdn.rawgit.com/crisward/riot-grid/master/grid-logo.svg" height="140"/>
+
 [![Build Status](https://travis-ci.org/crisward/riot-grid.svg)](https://travis-ci.org/crisward/riot-grid)
 [![Coverage Status](https://coveralls.io/repos/crisward/riot-grid/badge.svg?branch=master&service=github&v=3)](https://coveralls.io/github/crisward/riot-grid?branch=master)
 [![NPM Downloads](https://img.shields.io/npm/dm/riot-grid.svg)](https://www.npmjs.com/package/riot-grid)
