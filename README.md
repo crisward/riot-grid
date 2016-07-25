@@ -1,6 +1,6 @@
 <img src="https://cdn.rawgit.com/crisward/riot-grid/master/grid-logo.svg" height="140"/>
 
-Checkout the new [RiotGrid2](https://github.com/crisward/riot-grid)
+Checkout the new [RiotGrid2](https://github.com/crisward/riot-grid2)
 
 [![Build Status](https://travis-ci.org/crisward/riot-grid.svg)](https://travis-ci.org/crisward/riot-grid)
 [![Coverage Status](https://coveralls.io/repos/crisward/riot-grid/badge.svg?branch=master&service=github&v=3)](https://coveralls.io/github/crisward/riot-grid?branch=master)
